@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Flood Fill</title>
+
+<script>
+    var canvas;    // DOM object corresponding to the canvas
+    var graphics;  // 2D graphics context for drawing on the canvas
+
+    // note: change both for a different background color
+    var backgroundColor = "aliceblue";
+    var backgroundRGB = [240,248,255,255];
+
+    var cx = 20;
+    var cy = 20;
+
+    // draw a polygon
+    function regularPolygon(n, cx, cy, r, lineColor, fillColor) {
+        var theta = ((2*Math.PI) / n);
+
+        graphics.strokeStyle = lineColor;
+        graphics.beginPath();
+        graphics.moveTo(cx+r,cy);
+
+        for (i = 1; i < n+1; i++) {
+          var angle = (theta*i);
+          var x = Math.round(cx + r*Math.cos(angle));
+          var y = Math.round(cy + r*Math.sin(angle));
+          graphics.lineTo(x,y);
+        }
+        graphics.stroke();
+
+        graphics.fillStyle = fillColor;
+    }
+
+    // return true if color1==color2, an false otherwise
+    // example input: color1 = [0,255,0,255], pure green
+    function colorEqual(color1, color2) {
+        for (i = 0; i < color1.length; i++) {
+          if (color1[i] != color2[i]) {
+            return false;
+          }
+        }
+        return true;
+    }
+
+    // fill a shape, starting at the pixel (x,y)
+    // note: make sure to set "fillStyle" to the desired fill color
+    // before calling this function
+    function floodFill(x, y, oldColor) {
+        var currentColor = graphics.getImageData(x, y, 1, 1).data;
+        if (colorEqual(currentColor, oldColor) == false) {
+          return;
+        } else {
+          graphics.fillRect(x, y, 1, 1);
+          floodFill(x+1, y, oldColor);
+          floodFill(x-1, y, oldColor);
+          floodFill(x, y+1, oldColor);
+          floodFill(x, y-1, oldColor);
+        }
+    }
+
+    function draw() {
+        // make sure to color the background first, since it doesn't have a default color
+        graphics.fillStyle = backgroundColor;
+        graphics.fillRect(0,0,canvas.width,canvas.height);
+
+        // call your regular polygon function, then fill it from the center
+
+        var line = "azure"
+        var color1 = "lightpink"
+        var color2 = "lightsteelblue"
+        var color3 = "lightyellow"
+
+        polygon = regularPolygon(6, cx+90, cy+80, 30, line, color3);
+        floodFill(cx+90, cy+80, backgroundRGB);
+
+        polygon = regularPolygon(7, cx+210, cy+240, 20, line, color3);
+        floodFill(cx+210, cy+240, backgroundRGB);
+
+        polygon = regularPolygon(8, cx+250, cy+60, 70, line, color3);
+        floodFill(cx+250, cy+60, backgroundRGB);
+
+        polygon = regularPolygon(7, cx+90, cy+180, 40, line, color2);
+        floodFill(cx+90, cy+180, backgroundRGB);
+
+        polygon = regularPolygon(5, cx+150, cy+30, 20, line, color2);
+        floodFill(cx+150, cy+30, backgroundRGB);
+
+        polygon = regularPolygon(8, cx+390, cy+50, 20, line, color2);
+        floodFill(cx+380, cy+50, backgroundRGB);
+
+        polygon = regularPolygon(9, cx+350, cy+200, 50, line, color2);
+        floodFill(cx+350, cy+200, backgroundRGB);
+
+        polygon = regularPolygon(8, cx+60, cy+30, 40, line, color1);
+        floodFill(cx+60, cy+30, backgroundRGB);
+
+        polygon = regularPolygon(5, cx+190, cy+180, 60, line, color1);
+        floodFill(cx+190, cy+180, backgroundRGB);
+
+        polygon = regularPolygon(7, cx+20, cy+150, 20, line, color1);
+        floodFill(cx+20, cy+150, backgroundRGB);
+
+        polygon = regularPolygon(6, cx+320, cy+100, 50, line, color1);
+        floodFill(cx+320, cy+90, backgroundRGB);
+
+    }
+
+    function init() {
+        canvas = document.getElementById("theCanvas");
+        graphics = canvas.getContext("2d");
+        draw();  // draw something on the canvas
+    }
+</script>
+
+
+</head>
+<body onload="init()">
+    <canvas id="theCanvas" width="450" height="290"></canvas>
+</body>
+</html>
